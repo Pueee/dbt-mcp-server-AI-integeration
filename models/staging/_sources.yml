@@ -1,0 +1,41 @@
+version: 2
+
+sources:
+  - name: ad_platform
+    description: >
+      Raw feeds landed from the ad platforms. In this project they are loaded
+      as dbt seeds so the whole thing runs offline; in production these would
+      be external tables written by the ingestion layer.
+    schema: main_raw
+    tables:
+      - name: raw_channels
+        description: Reference list of media channels and the platform each runs on.
+        columns:
+          - name: channel_id
+            tests: [unique, not_null]
+
+      - name: raw_campaigns
+        description: One row per campaign booked, with its budget and flight dates.
+        columns:
+          - name: campaign_id
+            tests: [unique, not_null]
+          - name: channel_id
+            tests:
+              - relationships:
+                  arguments:
+                      to: source('ad_platform', 'raw_channels')
+                      field: channel_id
+
+      - name: raw_ad_spend
+        description: >
+          Daily performance per campaign. Rows arrive one to three days after
+          the event date, so event_date and loaded_at are not the same thing.
+        loaded_at_field: loaded_at
+        freshness:
+          warn_after: {count: 3, period: day}
+          error_after: {count: 7, period: day}
+        columns:
+          - name: event_date
+            tests: [not_null]
+          - name: campaign_id
+            tests: [not_null]

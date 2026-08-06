@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  - name: stg_channels
+    description: One row per media channel. Renamed and typed, no business logic.
+    columns:
+      - name: channel_id
+        description: Primary key.
+        tests: [unique, not_null]
+      - name: channel_group
+        tests:
+          - accepted_values:
+              arguments:
+                  values: ['Search', 'Social', 'Display', 'Video', 'Commerce']
+
+  - name: stg_campaigns
+    description: One row per campaign, with flight length derived from the dates.
+    columns:
+      - name: campaign_id
+        description: Primary key.
+        tests: [unique, not_null]
+      - name: campaign_status
+        description: Uppercased and trimmed at staging so downstream models can trust it.
+        tests:
+          - accepted_values:
+              arguments:
+                  values: ['ACTIVE', 'PAUSED', 'COMPLETED']
+      - name: flight_length_days
+        tests: [not_null]
+
+  - name: stg_ad_spend
+    description: >
+      Daily campaign performance with spend converted from pence to pounds.
+      Grain is one row per campaign per day.
+    columns:
+      - name: ad_spend_key
+        description: Surrogate key on event_date plus campaign_id.
+        tests: [unique, not_null]
+      - name: campaign_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                  to: ref('stg_campaigns')
+                  field: campaign_id
+      - name: spend_gbp
+        tests: [not_null]
+
+unit_tests:
+  - name: test_pence_convert_and_status_clean
+    description: >
+      Pins the two transformations staging is responsible for: spend converts
+      from pence to pounds with correct rounding, and status is uppercased and
+      trimmed. Runs on mock data, so it catches a regression without touching
+      the warehouse.
+    model: stg_campaigns
+    given:
+      - input: source('ad_platform', 'raw_campaigns')
+        rows:
+          - {campaign_id: 1, campaign_name: 'A', client_name: 'X', channel_id: 1, start_date: '2026-01-01', end_date: '2026-01-10', budget_gbp: 1000, status: ' active '}
+          - {campaign_id: 2, campaign_name: 'B', client_name: 'Y', channel_id: 2, start_date: '2026-02-01', end_date: '2026-02-01', budget_gbp: 500, status: 'PAUSED'}
+    expect:
+      rows:
+        - {campaign_id: 1, campaign_status: 'ACTIVE', flight_length_days: 10}
+        - {campaign_id: 2, campaign_status: 'PAUSED', flight_length_days: 1}
