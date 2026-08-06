@@ -140,7 +140,7 @@ platform tools stay absent, since those need a dbt platform account.
 ### Asking where data comes from
 > what feeds fct_ad_performance?
 
-[![alt text](walkthrough_images/01_Connector_in_Claude.png)](walkthrough_images/02_DAG_fct_ad_performance.png)
+[![alt text](walkthrough_images/02_DAG_fct_ad_performance.png)](walkthrough_images/02_DAG_fct_ad_performance.png)
 
 It reads the actual dependency graph from manifest.json rather than
 parsing the SQL, which is why it picked up the snapshot as well.
@@ -148,7 +148,7 @@ parsing the SQL, which is why it picked up the snapshot as well.
 ### General SQL Query 
 > Top 5 best performance Campaigns in last month
 
-[![alt text](walkthrough_images/01_Connector_in_Claude.png)](walkthrough_images/03_SQL_Top_Campaigns.png)
+[![alt text](walkthrough_images/03_SQL_Top_Campaigns.png)](walkthrough_images/03_SQL_Top_Campaigns.png)
 
 "Best performing" isn't defined anywhere in the project, so the agent had to
 pick a measure and calculate. It went to `mart_campaign_pacing` rather than the
