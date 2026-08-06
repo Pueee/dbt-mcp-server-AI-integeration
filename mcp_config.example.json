@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "dbt": {
+      "command": "uvx",
+      "args": ["dbt-mcp"],
+      "env": {
+        "DBT_PROJECT_DIR": "/absolute/path/to/dbt_mcp_demo",
+        "DBT_PROFILES_DIR": "/absolute/path/to/dbt_mcp_demo",
+        "DBT_PATH": "/absolute/path/to/dbt",
+        "DBT_HOST": "",
+        "DBT_TOKEN": "",
+        "DISABLE_SEMANTIC_LAYER": "true",
+        "DISABLE_DISCOVERY": "true"
+      }
+    }
+  }
+}

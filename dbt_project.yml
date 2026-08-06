@@ -1,0 +1,46 @@
+name: 'dbt_mcp_demo'
+version: '1.0.0'
+config-version: 2
+
+profile: 'dbt_mcp_demo'
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+vars:
+  # Lookback window for the incremental fact table. Widen this and re-run to
+  # backfill late-arriving rows the platform feeds deliver after the fact.
+  spend_lookback_days: 3
+
+models:
+  dbt_mcp_demo:
+    staging:
+      +materialized: view
+      +schema: staging
+    marts:
+      +materialized: table
+      +schema: marts
+
+seeds:
+  dbt_mcp_demo:
+    +schema: raw
+    raw_ad_spend:
+      +column_types:
+        event_date: date
+        loaded_at: timestamp
+    raw_campaigns:
+      +column_types:
+        start_date: date
+        end_date: date
+
+snapshots:
+  dbt_mcp_demo:
+    +target_schema: snapshots
