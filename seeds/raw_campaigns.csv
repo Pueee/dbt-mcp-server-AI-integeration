@@ -1,0 +1,16 @@
+campaign_id,campaign_name,client_name,channel_id,start_date,end_date,budget_gbp,status
+1001,Northbank Paid Search Q1,Northbank Insurance,1,2026-01-02,2026-05-02,277000,ACTIVE
+1002,Northbank Retail Media Q1,Northbank Insurance,5,2026-02-04,2026-04-05,87000,COMPLETED
+1003,Halden Paid Search Q1,Halden Motors,1,2026-01-02,2026-03-03,95000,ACTIVE
+1004,Halden Programmatic Q1,Halden Motors,3,2026-02-05,2026-04-06,58000,COMPLETED
+1005,Halden Online Video Q1,Halden Motors,4,2026-01-29,2026-05-29,180000,ACTIVE
+1006,Halden Retail Media Q1,Halden Motors,5,2026-01-01,2026-03-02,28000,PAUSED
+1007,Verity Paid Search Q1,Verity Foods,1,2026-01-10,2026-03-11,158000,ACTIVE
+1008,Verity Programmatic Q1,Verity Foods,3,2026-01-23,2026-04-23,46000,COMPLETED
+1009,Verity Online Video Q1,Verity Foods,4,2026-01-03,2026-05-03,147000,PAUSED
+1010,Verity Retail Media Q1,Verity Foods,5,2026-01-25,2026-03-26,56000,COMPLETED
+1011,Kestrel Paid Search Q1,Kestrel Travel,1,2026-02-10,2026-06-10,234000,ACTIVE
+1012,Kestrel Paid Social Q1,Kestrel Travel,2,2026-02-15,2026-04-16,79000,ACTIVE
+1013,Kestrel Programmatic Q1,Kestrel Travel,3,2026-01-19,2026-03-20,43000,ACTIVE
+1014,Kestrel Online Video Q1,Kestrel Travel,4,2026-01-25,2026-04-25,198000,PAUSED
+1015,Kestrel Retail Media Q1,Kestrel Travel,5,2026-01-24,2026-03-25,52000,ACTIVE
