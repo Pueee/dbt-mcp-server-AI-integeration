@@ -49,7 +49,6 @@ dbt seed        # load the raw CSVs
 dbt build       # models, snapshot and 42 tests
 dbt docs generate
 ```
-
 Seeds have to load before the first `dbt build` because dbt has no dependency
 edge between a seed and a source that happens to point at it. After that,
 `dbt build` on its own is fine.
