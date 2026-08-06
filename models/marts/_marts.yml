@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: Calendar dimension covering 2026, keyed on an integer date_key.
+    columns:
+      - name: date_key
+        tests: [unique, not_null]
+
+  - name: dim_channel
+    description: Media channel dimension.
+    columns:
+      - name: channel_key
+        tests: [unique, not_null]
+
+  - name: dim_campaign
+    description: >
+      Campaign dimension with channel attributes joined on. Type 1: the current
+      state only. See snap_campaign_budget for the Type 2 history of budget and
+      status changes.
+    columns:
+      - name: campaign_key
+        tests: [unique, not_null]
+      - name: budget_gbp
+        tests: [not_null]
+      - name: channel_key
+        tests:
+          - relationships:
+              arguments:
+                  to: ref('dim_channel')
+                  field: channel_key
+
+  - name: fct_ad_performance
+    description: >
+      Daily campaign performance. Grain is one row per campaign per day.
+      Incremental with a lookback window on event_date to pick up rows the
+      platform feeds deliver late.
+    columns:
+      - name: ad_spend_key
+        tests: [unique, not_null]
+      - name: campaign_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                  to: ref('dim_campaign')
+                  field: campaign_key
+      - name: date_key
+        tests:
+          - relationships:
+              arguments:
+                  to: ref('dim_date')
+                  field: date_key
+      - name: spend_gbp
+        tests: [not_null]
+
+  - name: mart_campaign_pacing
+    description: >
+      One row per campaign: spend to date against booked budget, alongside CPM,
+      CPC, CPA and CTR. The reporting layer a client team would query.
+    columns:
+      - name: campaign_key
+        tests: [unique, not_null]
+      - name: budget_spent_pct
+        description: Spend to date as a percentage of booked budget.
